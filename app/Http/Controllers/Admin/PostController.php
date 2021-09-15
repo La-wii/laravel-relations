@@ -39,7 +39,11 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
+        $request->validate([
+            'title'=>'required',
+            'content'=>'required',
+        ]); 
         $data = $request->all();
         $newPost = new Post();
         $newPost->slug = Str::of($data['title'])->slug('-');
@@ -81,7 +85,11 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Post $post)
-    {
+    {   
+        $request->validate([
+            'title'=>'required',
+            'content'=>'required',
+        ]);
         $data = $request->all();
         $post->update($data);
 
