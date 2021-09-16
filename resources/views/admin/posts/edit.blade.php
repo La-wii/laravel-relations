@@ -36,7 +36,7 @@
                     @endforeach
                 </select>
             </div>
-
+            
             <div class="mb-3">
                 <label for="desc" class="form-label">Descrizione</label>
                 <textarea class="form-control" name="content" id="desc" cols="30" rows="10">{{ $post->content}}</textarea>            
