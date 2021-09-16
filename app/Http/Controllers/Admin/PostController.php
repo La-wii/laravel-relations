@@ -52,10 +52,12 @@ class PostController extends Controller
         $newPost->slug = Str::of($data['title'])->slug('-');
         $newPost->fill($data);
         $newPost->save();
+        
+        if(array_key_exists('tags',$data)){
+            $newPost->tags()->attach($data['tags']);
+        }
 
         return redirect()->route('admin.posts.index');
-
-        $newPost->tags()->attach($data['tags']);
     }
 
     /**
@@ -79,7 +81,8 @@ class PostController extends Controller
     public function edit(Post $post)
     {   
         $categories = Category::all();
-        return view('admin.posts.edit', compact('post', 'categories'));
+        $tags = Tag::all();
+        return view('admin.posts.edit', compact('post', 'categories', 'tags'));
     }
 
     /**
@@ -98,6 +101,10 @@ class PostController extends Controller
         $data = $request->all();
         $post->update($data);
 
+        if(array_key_exists('tags',$data)){
+            $newPost->tags()->sync($data['tags']);
+        }
+
         return redirect()->route('admin.posts.index')->with('updated', 'Hai modificato il post ' . $post->id);
     }
 
@@ -110,6 +117,7 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         $post->delete();
+        $post->tags()->detach();
         return redirect()->route('admin.posts.index')->with('deleted', 'Hai eliminato il post ' . $post->id);
     }
 }
